@@ -86,7 +86,7 @@ uint8_t w25_flash_read_device_id()
 static void noread_op(uint8_t op)
 {
     SPI_FLASH_CS_ENABLE();
-    SPI_EXCHANGE(OP_WRITE_ENABLE);
+    SPI_EXCHANGE(op);
     SPI_FLASH_CS_DISABLE();
 }
 
