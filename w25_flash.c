@@ -92,15 +92,14 @@ static void noread_op(uint8_t op)
 
 static uint8_t read_reg(uint8_t op)
 {
+    uint8_t v;
     SPI_FLASH_CS_ENABLE();
     SPI_EXCHANGE(OP_READ_STATUS_REG_1);
-    uint8_t v = SPI_EXCHANGE(READ_DUMMY);
+    v = SPI_EXCHANGE(READ_DUMMY);
     SPI_FLASH_CS_DISABLE();
 
     return v;
 }
-
-
 
 void w25_flash_status_reg1(union w25_flash_status_reg1_t *status1)
 {
@@ -131,8 +130,7 @@ static void spin_while_busy()
         {
             break;
         }
-    }
-    
+    }   
 }
 
 void w25_flash_write_enable(void)
