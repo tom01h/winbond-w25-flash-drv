@@ -33,29 +33,35 @@ int main(void) {
     
     spi_enable_PIC24F16KL402x();
     
-    //char write_buf[] = { 0x01, 0x02, 0x03, 0x04 };
-    //char read_buf[4] = { 0 };    
-    
-
-            
+    char write_buf[] = { 0x01, 0x02, 0x03, 0x04 };
+    char read_buf[4] = { 0 };    
+              
     while (1) {
         delay();        
         delay();
         
         w25_flash_write_enable();
         w25_flash_chip_erase();
-        
-        union w25_flash_status_reg1_t status1;        
-        w25_flash_status_reg1(&status1);
-        
+             
         /* ensure we get 0xff (erased) */
         uint8_t tb = 0;
         w25_flash_read_data(0, &tb, 1);        
         
+        /* now write some data and read it back */
+        w25_flash_write_enable();
+        w25_flash_page_program(0, write_buf, 4, false);
+        
+        w25_flash_read_data(0, read_buf, 4);
+        
+        bool success = tb == 0xFF && read_buf[0] == write_buf[0] 
+                && read_buf[1] == write_buf[1]
+                && read_buf[2] == write_buf[2]
+                && read_buf[3] == write_buf[3];
+        
         /* NOTE: for some reason RA4 and RB4 wont work as output, couldnt find periph */           
         //uint8_t device_id = w25_flash_read_device_id();
         /* sink pulled high */
-        PORTAbits.RA2 = tb == 0xFF ? 0 : 1;
+        PORTAbits.RA2 = success ? 0 : 1;
         
         
         delay();
