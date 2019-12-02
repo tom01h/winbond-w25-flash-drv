@@ -1,0 +1,12 @@
+*.o
+*.o.d
+*.map
+*.map.d
+*.elf
+*.elf.d
+*.mk
+*.hex
+*.bak
+build/
+dist/
+
